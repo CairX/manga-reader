@@ -5,6 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale-1" />
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<title>manga-reader</title>
+		<script>
+			THRUST.remote.listen(function(msg) {
+				console.log("got back a message " + JSON.stringify(msg));
+			});
+		</script>
 	</head>
 	<body>
 		<header>
@@ -14,7 +19,6 @@
 		</header>
 		<img id="page" src="gamaran-633146.jpg" />
 		<script>
-			"use strict";
 
 			var page = document.getElementById("page");
 
@@ -39,6 +43,10 @@
 						break;
 				}
 			}, false);
+
+			THRUST.remote.listen(function(msg) {
+				console.log("got back a message " + JSON.stringify(msg));
+			});
 		</script>
 	</body>
 </html>

@@ -10,3 +10,5 @@ asyncio.async(api.spawn())
 asyncio.async(api.window({'root_url': url}).show())
 
 loop.run_forever()
+
+api.window.remote('SOME MESSAGE!')
