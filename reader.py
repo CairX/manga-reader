@@ -1,8 +1,16 @@
 import json
+import os
+import re
 
 from flask import Flask, jsonify, send_from_directory
 
 app = Flask(__name__)
+
+def natural(l):
+	convert = lambda text: int(text) if text.isdigit() else text
+	alphanum = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+	l.sort(key=alphanum)
+
 
 @app.route("/")
 def hello_world():
@@ -19,6 +27,22 @@ def test():
 @app.route("/reader")
 def reader():
     return app.send_static_file("reader.html")
+
+@app.route("/chapters")
+def chapters():
+    path = "/home/cairns/workspace/manga-downloader/library/horimiya"
+    chapters = []
+
+    for root, dirs, files in os.walk(path):
+        number = root.replace(path, '')[1:]
+        chapter = {
+            "number": number,
+            "pages": sorted(files)
+        }
+        chapters.append(chapter)
+
+    chapters = sorted(chapters, key=lambda k: k["number"])
+    return jsonify({"chapters": chapters})
 
 @app.route('/files/<path:path>')
 def files(path):

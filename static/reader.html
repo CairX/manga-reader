@@ -10,14 +10,20 @@
 		<div id="result"></div>
 		<script>
 			console.log(Ajax);
-			Ajax.get("/test", {
+			Ajax.get("/chapters", {
 				onSuccess: function(response) {
 					console.log("success");
-					// console.log(response.response);
-					var items = JSON.parse(response.response).entries;
+					console.log(response.response);
+					/*var items = JSON.parse(response.response).entries;
 					var all = "";
 					for (var i = 0; i < items.length; i++) {
 						all += items[i].title + "<br />";
+					}
+					document.getElementById("result").innerHTML = all;*/
+					var items = JSON.parse(response.response).chapters;
+					var all = "";
+					for (var i = 0; i < items.length; i++) {
+						all += items[i].number + "<br />";
 					}
 					document.getElementById("result").innerHTML = all;
 				}
