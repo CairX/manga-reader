@@ -9,22 +9,24 @@
 		<h1>Reader</h1>
 		<div id="result"></div>
 		<script>
+			var path = "/home/cairns/workspace/manga-downloader/library/horimiya";
+			var items = {};
+
 			console.log(Ajax);
 			Ajax.get("/chapters", {
 				onSuccess: function(response) {
 					console.log("success");
 					console.log(response.response);
-					/*var items = JSON.parse(response.response).entries;
+
+					items = JSON.parse(response.response).chapters;
 					var all = "";
 					for (var i = 0; i < items.length; i++) {
-						all += items[i].title + "<br />";
+						all += "Chapter: " + items[i].number + "<br />";
+						for (var page = 0; page < items[i].pages.length; page++) {
+							all += "Page: " + items[i].pages[page] + "<br />";
+						}
 					}
-					document.getElementById("result").innerHTML = all;*/
-					var items = JSON.parse(response.response).chapters;
-					var all = "";
-					for (var i = 0; i < items.length; i++) {
-						all += items[i].number + "<br />";
-					}
+
 					document.getElementById("result").innerHTML = all;
 				}
 			});
