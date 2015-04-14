@@ -4,30 +4,72 @@
 		<meta charset="utf-8" />
 		<title>Reader</title>
 		<script src="files/ajax.js"></script>
+		<style>
+			#page {
+				max-width: 250px;
+				background: black;
+				padding: 6px;
+			}
+		</style>
 	</head>
 	<body>
 		<h1>Reader</h1>
+		<div>
+			Chapters: <select id="chapters"></select><br />
+			Pages: <select id="pages"></select>
+		</div>
+		<div>
+			<img id="page" src="" />
+			<!--img src="images/0029/01.jpg" /-->
+		</div>
 		<div id="result"></div>
+
 		<script>
 			var path = "/home/cairns/workspace/manga-downloader/library/horimiya";
 			var items = {};
+			var chapters = document.getElementById("chapters");
+			var pages = document.getElementById("pages");
+			var page = document.getElementById("page");
+
+			var updatePage = function() {
+				var something = "images/" + chapters.value + "/" + pages.value;
+				//console.log(something);
+				//console.log(page);
+				//console.log(page.src);
+				page.src = something;
+				console.log(page.src);
+			};
 
 			console.log(Ajax);
 			Ajax.get("/chapters", {
 				onSuccess: function(response) {
-					console.log("success");
-					console.log(response.response);
+					// console.log("success");
+					// console.log(response.response);
 
 					items = JSON.parse(response.response).chapters;
 					var all = "";
+					var chapterOptions = "";
+					var pageOptions = "";
+
 					for (var i = 0; i < items.length; i++) {
 						all += "Chapter: " + items[i].number + "<br />";
-						for (var page = 0; page < items[i].pages.length; page++) {
-							all += "Page: " + items[i].pages[page] + "<br />";
+
+						chapterOptions += "<option>" + items[i].number + "</options>";
+
+						for (var p = 0; p < items[i].pages.length; p++) {
+							all += "Page: " + items[i].pages[p] + "<br />";
 						}
 					}
 
+					for (var p = 0; p < items[0].pages.length; p++) {
+						pageOptions += "<option>" + items[0].pages[p] + "</options>";
+					}
+
 					document.getElementById("result").innerHTML = all;
+					chapters.innerHTML = chapterOptions;
+					pages.innerHTML = pageOptions;
+
+					updatePage();
 				}
 			});
 		</script>

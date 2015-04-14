@@ -35,11 +35,12 @@ def chapters():
 
     for root, dirs, files in os.walk(path):
         number = root.replace(path, '')[1:]
-        chapter = {
-            "number": number,
-            "pages": sorted(files)
-        }
-        chapters.append(chapter)
+        if number:
+            chapter = {
+                "number": number,
+                "pages": sorted(files)
+            }
+            chapters.append(chapter)
 
     chapters = sorted(chapters, key=lambda k: k["number"])
     return jsonify({"chapters": chapters})
@@ -47,6 +48,11 @@ def chapters():
 @app.route('/files/<path:path>')
 def files(path):
     return send_from_directory('static', path)
+
+@app.route('/images/<path:path>')
+def images(path):
+    return send_from_directory('/home/cairns/workspace/manga-downloader/library/horimiya', path)
+
 
 if __name__ == "__main__":
     app.debug = True
