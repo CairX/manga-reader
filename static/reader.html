@@ -20,7 +20,6 @@
 		</div>
 		<div>
 			<img id="page" src="" />
-			<!--img src="images/0029/01.jpg" /-->
 		</div>
 		<div id="result"></div>
 
@@ -32,12 +31,8 @@
 			var page = document.getElementById("page");
 
 			var updatePage = function() {
-				var something = "images/" + chapters.value + "/" + pages.value;
-				//console.log(something);
-				//console.log(page);
-				//console.log(page.src);
-				page.src = something;
-				console.log(page.src);
+				var src = "images/" + chapters.value + "/" + pages.value;
+				page.src = src;
 			};
 
 			console.log(Ajax);
@@ -65,11 +60,36 @@
 						pageOptions += "<option>" + items[0].pages[p] + "</options>";
 					}
 
-					document.getElementById("result").innerHTML = all;
+					//document.getElementById("result").innerHTML = all;
 					chapters.innerHTML = chapterOptions;
 					pages.innerHTML = pageOptions;
 
 					updatePage();
+				}
+			});
+
+			pages.addEventListener("change", updatePage);
+
+			var next  = function() {
+				pages.value = pages.options[pages.selectedIndex + 1].value;
+				updatePage();
+			};
+
+			var previous  = function() {
+				pages.value = pages.options[pages.selectedIndex - 1].value;
+				updatePage();
+			};
+
+			document.addEventListener("keypress", function(e) {
+				//console.log(e);
+
+				switch (e.keyCode) {
+					case 39:
+						next();
+						break;
+					case 37:
+						previous();
+						break;
 				}
 			});
 		</script>
