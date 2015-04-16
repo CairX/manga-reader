@@ -35,7 +35,7 @@
 				page.src = src;
 			};
 
-			console.log(Ajax);
+			//console.log(Ajax);
 			Ajax.get("/chapters", {
 				onSuccess: function(response) {
 					// console.log("success");
@@ -71,7 +71,20 @@
 			pages.addEventListener("change", updatePage);
 
 			var next  = function() {
-				pages.value = pages.options[pages.selectedIndex + 1].value;
+				var n = pages.selectedIndex + 1;
+
+				if (n >= pages.length) {
+					chapters.value = chapters.options[chapters.selectedIndex + 1].value;
+
+					var ops = "";
+					for (var p = 0; p < items[chapters.selectedIndex].pages.length; p++) {
+						ops += "<option>" + items[chapters.selectedIndex].pages[p] + "</options>";
+					}
+					pages.innerHTML = ops;
+				} else {
+					pages.value = pages.options[pages.selectedIndex + 1].value;
+				}
+
 				updatePage();
 			};
 
@@ -81,7 +94,7 @@
 			};
 
 			document.addEventListener("keypress", function(e) {
-				console.log(e);
+				//console.log(e);
 
 				switch (e.keyCode) {
 					// Left arrow
