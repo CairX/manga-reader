@@ -81,14 +81,32 @@
 			};
 
 			document.addEventListener("keypress", function(e) {
-				//console.log(e);
+				console.log(e);
 
 				switch (e.keyCode) {
+					// Left arrow
+					case 37:
+						previous();
+						break;
+					// Right arrow
 					case 39:
 						next();
 						break;
-					case 37:
+				}
+
+				switch(e.charCode) {
+					// Space
+					case 32:
+						next();
+						e.preventDefault();
+						break;
+					// A
+					case 97:
 						previous();
+						break;
+					// D
+					case 100:
+						next();
 						break;
 				}
 			});
