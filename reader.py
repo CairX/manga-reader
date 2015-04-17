@@ -6,6 +6,7 @@ from flask import Flask, jsonify, send_from_directory
 
 app = Flask(__name__)
 
+
 def natural(l):
     convert = lambda text: int(text) if text.isdigit() else text
     alphanum = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
@@ -16,6 +17,7 @@ def natural(l):
 def reader():
     return app.send_static_file("reader.html")
 
+
 @app.route("/test")
 def test():
     path = "/home/cairns/workspace/manga-downloader/.index/index.json"
@@ -23,6 +25,7 @@ def test():
         entries = json.load(file)
         entries = {"entries": entries}
         return jsonify(entries)
+
 
 @app.route("/chapters")
 def chapters():
@@ -41,9 +44,37 @@ def chapters():
     chapters = sorted(chapters, key=lambda k: k["number"])
     return jsonify({"chapters": chapters})
 
+
+@app.route("/mangas")
+def mangas():
+    path = "/home/cairns/workspace/manga-downloader/library/"
+    mangas = {}
+
+    for root, dirs, files in os.walk(path):
+        root = root.replace(path, "")
+
+        if not root or "/" not in root:
+            continue
+
+        manga = root[:root.find("/")]
+        chapter = root[root.find("/"):]
+
+        if manga not in mangas:
+            mangas[manga] = []
+
+        mangas[manga].append({
+            "chapter": chapter,
+            "pages": sorted(files)
+        })
+
+    return jsonify(mangas)
+    # return jsonify({"mangas": mangas})
+
+
 @app.route('/files/<path:path>')
 def files(path):
     return send_from_directory('static', path)
+
 
 @app.route('/images/<path:path>')
 def images(path):

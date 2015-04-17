@@ -1,4 +1,4 @@
-/* global Ajax */
+/* global Ajax, console */
 
 "use strict";
 
@@ -82,6 +82,12 @@ Ajax.get("/chapters", {
 		pages.innerHTML = createOptions(items[0].pages);
 
 		updatePage();
+	}
+});
+Ajax.get("/mangas", {
+	onSuccess: function(response) {
+		var mangas = JSON.parse(response.response);
+		console.log(mangas);
 	}
 });
 
