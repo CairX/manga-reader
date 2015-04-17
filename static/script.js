@@ -1,72 +1,94 @@
-var path = "/home/cairns/workspace/manga-downloader/library/horimiya";
+/* global Ajax */
+
+"use strict";
+
+
+/* ------------------------------------------------- *
+ * Global varibles.
+ * ------------------------------------------------- */
 var items = {};
 var chapters = document.getElementById("chapters");
 var pages = document.getElementById("pages");
 var page = document.getElementById("page");
 
+
+/* ------------------------------------------------- *
+ * Generate option elements in the form of a
+ * combined string that can be easly loaded.
+ * ------------------------------------------------- */
+var createOptions = function(items) {
+	var options = "";
+
+	for (var i = 0; i < items.length; i++) {
+		options += "<option>" + items[i] + "</options>";
+	}
+
+	return options;
+};
+
+/* ------------------------------------------------- *
+ * Upate the image viewed.
+ * ------------------------------------------------- */
 var updatePage = function() {
 	var src = "images/" + chapters.value + "/" + pages.value;
 	page.src = src;
 };
+pages.addEventListener("change", updatePage);
 
-//console.log(Ajax);
+
+/* ------------------------------------------------- *
+ * Navigate to the next page.
+ * ------------------------------------------------- */
+var next  = function() {
+	var index = pages.selectedIndex + 1;
+
+	if (index >= pages.length) {
+		chapters.value = chapters.options[index].value;
+		pages.innerHTML = createOptions(items[index].pages);
+	} else {
+		pages.value = pages.options[index].value;
+	}
+
+	updatePage();
+};
+
+
+/* ------------------------------------------------- *
+ * Navigate to the previous page.
+ * ------------------------------------------------- */
+var previous  = function() {
+	pages.value = pages.options[pages.selectedIndex - 1].value;
+	updatePage();
+};
+
+
+/* ------------------------------------------------- *
+ * On init load chapter and beloning page names
+ * for the test manga "Horimiya".
+ * ------------------------------------------------- */
 Ajax.get("/chapters", {
 	onSuccess: function(response) {
 		// console.log("success");
 		// console.log(response.response);
 
 		items = JSON.parse(response.response).chapters;
-		var all = "";
 		var chapterOptions = "";
-		var pageOptions = "";
 
 		for (var i = 0; i < items.length; i++) {
-			all += "Chapter: " + items[i].number + "<br />";
-
 			chapterOptions += "<option>" + items[i].number + "</options>";
-
-			for (var p = 0; p < items[i].pages.length; p++) {
-				all += "Page: " + items[i].pages[p] + "<br />";
-			}
 		}
 
-		for (var p = 0; p < items[0].pages.length; p++) {
-			pageOptions += "<option>" + items[0].pages[p] + "</options>";
-		}
-
-		//document.getElementById("result").innerHTML = all;
 		chapters.innerHTML = chapterOptions;
-		pages.innerHTML = pageOptions;
+		pages.innerHTML = createOptions(items[0].pages);
 
 		updatePage();
 	}
 });
 
-pages.addEventListener("change", updatePage);
 
-var next  = function() {
-	var n = pages.selectedIndex + 1;
-
-	if (n >= pages.length) {
-		chapters.value = chapters.options[chapters.selectedIndex + 1].value;
-
-		var ops = "";
-		for (var p = 0; p < items[chapters.selectedIndex].pages.length; p++) {
-			ops += "<option>" + items[chapters.selectedIndex].pages[p] + "</options>";
-		}
-		pages.innerHTML = ops;
-	} else {
-		pages.value = pages.options[pages.selectedIndex + 1].value;
-	}
-
-	updatePage();
-};
-
-var previous  = function() {
-	pages.value = pages.options[pages.selectedIndex - 1].value;
-	updatePage();
-};
-
+/* ------------------------------------------------- *
+ * Keys
+ * ------------------------------------------------- */
 document.addEventListener("keypress", function(e) {
 	//console.log(e);
 
