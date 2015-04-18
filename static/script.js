@@ -81,6 +81,7 @@ chapters.addEventListener("change", function() {
 var updateImage = function() {
 	var src = "images/" + mangas.value + "/" + chapters.value + "/" + pages.value;
 	image.src = src;
+	document.documentElement.scrollTop = 0;
 };
 pages.addEventListener("change", function() {
 	updateImage();
