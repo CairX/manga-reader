@@ -7,25 +7,21 @@
 		<title>Reader</title>
 		<script src="files/ajax.js"></script>
 
-		<style>
-			#image {
-				max-width: 250px;
-				background: black;
-				padding: 6px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="files/style.css">
 	</head>
 	<body>
-		<h1>Reader</h1>
-		<div>
-			Mangas: <select id="mangas"></select><br />
-			Chapters: <select id="chapters"></select><br />
-			Pages: <select id="pages"></select>
-		</div>
-		<div>
+		<header>
+			<h1>Reader</h1>
+			<nav>
+				<select id="mangas"></select>
+				<select id="chapters"></select>
+				<select id="pages"></select>
+			</nav>
+		</header>
+
+		<section>
 			<img id="image" src="" />
-		</div>
-		<div id="result"></div>
+		</section>
 
 		<script src="files/script.js"></script>
 	</body>

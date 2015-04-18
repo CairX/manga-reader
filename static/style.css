@@ -1,0 +1,41 @@
+html {
+	font: 14px/1 sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+header {
+	background: whitesmoke;
+	border-bottom: 1px solid hsla(0, 0%, 0%, 0.05);
+
+	display: flex;
+	align-items: center;
+}
+
+h1 {
+	color: hsla(0, 0%, 0%, 0.25);
+	font-size: 1rem;
+	text-transform: uppercase;
+	font-weight: normal;
+
+	padding: 1rem;
+	margin: 0;
+}
+
+nav {
+	padding: 1rem;
+	margin-left: auto;
+}
+
+section {
+	text-align: center;
+}
+
+#image {
+	max-width: 100%;
+}
