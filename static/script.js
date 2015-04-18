@@ -124,6 +124,11 @@ var previous  = function() {
 	updateImage();
 };
 
+
+/* ------------------------------------------------- *
+ * Read-mode that keeps the view clean from all
+ * elements besides the page-image.
+ * ------------------------------------------------- */
 var toggleReadMode = function() {
 	readMode = !readMode;
 
