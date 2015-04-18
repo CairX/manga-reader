@@ -54,7 +54,10 @@ var updateManga = function() {
 
 	updateImage();
 };
-mangas.addEventListener("change", updateManga);
+mangas.addEventListener("change", function() {
+	updateManga();
+	mangas.blur();
+});
 
 
 /* ------------------------------------------------- *
@@ -66,7 +69,10 @@ var updateChapter = function() {
 
 	updateImage();
 };
-chapters.addEventListener("change", updateChapter);
+chapters.addEventListener("change", function() {
+	updateChapter();
+	chapters.blur();
+});
 
 
 /* ------------------------------------------------- *
@@ -76,7 +82,10 @@ var updateImage = function() {
 	var src = "images/" + mangas.value + "/" + chapters.value + "/" + pages.value;
 	image.src = src;
 };
-pages.addEventListener("change", updateImage);
+pages.addEventListener("change", function() {
+	updateImage();
+	pages.blur();
+});
 
 
 /* ------------------------------------------------- *
@@ -100,7 +109,16 @@ var next  = function() {
  * Navigate to the previous page.
  * ------------------------------------------------- */
 var previous  = function() {
-	pages.value = pages.options[pages.selectedIndex - 1].value;
+	var index = pages.selectedIndex - 1;
+
+	if (index < 0) {
+		chapters.value = chapters.options[chapters.selectedIndex - 1].value;
+		pages.innerHTML = createOptions(items[mangas.value][chapters.selectedIndex].pages);
+		pages.value = pages.options[pages.length -1].value;
+	} else {
+		pages.value = pages.options[index].value;
+	}
+
 	updateImage();
 };
 
