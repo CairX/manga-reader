@@ -41,6 +41,34 @@ var createOptions = function(list) {
 	return options;
 };
 
+
+/* ------------------------------------------------- *
+ * Update the chapter and page selector based
+ * on selected manga.
+ * ------------------------------------------------- */
+var updateManga = function() {
+	var manga = items[mangas.value];
+
+	chapters.innerHTML = createOptions(extract(manga, "chapter"));
+	pages.innerHTML = createOptions(manga[chapters.selectedIndex].pages);
+
+	updateImage();
+};
+mangas.addEventListener("change", updateManga);
+
+
+/* ------------------------------------------------- *
+ * Update pages for selected chapter.
+ * ------------------------------------------------- */
+var updateChapter = function() {
+	var chapter = items[mangas.value][chapters.selectedIndex];
+	pages.innerHTML = createOptions(chapter.pages);
+
+	updateImage();
+};
+chapters.addEventListener("change", updateChapter);
+
+
 /* ------------------------------------------------- *
  * Upate the image viewed.
  * ------------------------------------------------- */
@@ -85,24 +113,9 @@ Ajax.get("/mangas", {
 	onSuccess: function(response) {
 		items = JSON.parse(response.response);
 		mangas.innerHTML = createOptions(Object.keys(items));
-		updateChapterAndPages();
+		updateManga();
 	}
 });
-
-
-/* ------------------------------------------------- *
- * Update the chapter and page selector based
- * on selected manga.
- * ------------------------------------------------- */
-var updateChapterAndPages = function() {
-	var manga = items[mangas.value];
-
-	chapters.innerHTML = createOptions(extract(manga, "chapter"));
-	pages.innerHTML = createOptions(manga[0].pages);
-
-	updateImage();
-};
-mangas.addEventListener("change", updateChapterAndPages);
 
 
 /* ------------------------------------------------- *
