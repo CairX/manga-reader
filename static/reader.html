@@ -2,13 +2,13 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale-1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<title>Reader</title>
 		<script src="files/ajax.js"></script>
 
 		<style>
-			#page {
+			#image {
 				max-width: 250px;
 				background: black;
 				padding: 6px;
@@ -18,11 +18,12 @@
 	<body>
 		<h1>Reader</h1>
 		<div>
+			Mangas: <select id="mangas"></select><br />
 			Chapters: <select id="chapters"></select><br />
 			Pages: <select id="pages"></select>
 		</div>
 		<div>
-			<img id="page" src="" />
+			<img id="image" src="" />
 		</div>
 		<div id="result"></div>
 
