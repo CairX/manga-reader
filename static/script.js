@@ -11,6 +11,7 @@ var mangas = document.getElementById("mangas");
 var chapters = document.getElementById("chapters");
 var pages = document.getElementById("pages");
 var image = document.getElementById("image");
+var readMode = false;
 
 
 /* ------------------------------------------------- *
@@ -123,6 +124,15 @@ var previous  = function() {
 	updateImage();
 };
 
+var toggleReadMode = function() {
+	readMode = !readMode;
+
+	var elements = document.getElementsByClassName("toggle");
+	for (var i = 0; i < elements.length; i++) {
+		elements[i].style.display = readMode ? "none" : "";
+	}
+};
+
 
 /* ------------------------------------------------- *
  * On init, load mangas and their belonging chapter
@@ -141,7 +151,7 @@ Ajax.get("/mangas", {
  * Keys
  * ------------------------------------------------- */
 document.addEventListener("keypress", function(e) {
-	//console.log(e);
+	console.log(e);
 
 	switch (e.keyCode) {
 		// Left arrow
@@ -167,6 +177,10 @@ document.addEventListener("keypress", function(e) {
 		// D
 		case 100:
 			next();
+			break;
+		// R
+		case 114:
+			toggleReadMode();
 			break;
 	}
 });
