@@ -1,3 +1,4 @@
+import collections
 import json
 import os
 import re
@@ -57,7 +58,7 @@ def mangas():
             continue
 
         manga = root[:root.find("/")]
-        chapter = root[root.find("/"):]
+        chapter = root[root.find("/") + 1:]
 
         if manga not in mangas:
             mangas[manga] = []
@@ -67,18 +68,25 @@ def mangas():
             "pages": sorted(files)
         })
 
+    # Sort manga titles.
+    mangas = collections.OrderedDict(sorted(mangas.items()))
+
+    # Sort chapters within manga.
+    for manga, chapters in mangas.items():
+        mangas[manga] = sorted(chapters, key=lambda c: c["chapter"])
+
     return jsonify(mangas)
-    # return jsonify({"mangas": mangas})
 
 
-@app.route('/files/<path:path>')
+@app.route("/files/<path:path>")
 def files(path):
-    return send_from_directory('static', path)
+    return send_from_directory("static", path)
 
 
-@app.route('/images/<path:path>')
+@app.route("/images/<path:path>")
 def images(path):
-    return send_from_directory('/home/cairns/workspace/manga-downloader/library/horimiya', path)
+    base = "/home/cairns/workspace/manga-downloader/library"
+    return send_from_directory(base, path)
 
 
 if __name__ == "__main__":
