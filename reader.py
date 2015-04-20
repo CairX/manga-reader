@@ -3,8 +3,10 @@ import json
 import os
 import re
 
+from config import Config
 from flask import Flask, jsonify, send_from_directory
 
+config = Config('reader.conf')
 app = Flask(__name__)
 
 
@@ -21,7 +23,7 @@ def reader():
 
 @app.route("/test")
 def test():
-    path = "/home/cairns/workspace/manga-downloader/.index/index.json"
+    path = os.path.join(config.string("base"), ".index/index.json")
     with open(path, 'r') as file:
         entries = json.load(file)
         entries = {"entries": entries}
@@ -48,7 +50,8 @@ def chapters():
 
 @app.route("/mangas")
 def mangas():
-    path = "/home/cairns/workspace/manga-downloader/library/"
+    path = os.path.join(config.string("base"), "library/")
+    print(path)
     mangas = {}
 
     for root, dirs, files in os.walk(path):
@@ -85,7 +88,7 @@ def files(path):
 
 @app.route("/images/<path:path>")
 def images(path):
-    base = "/home/cairns/workspace/manga-downloader/library"
+    base = os.path.join(config.string("base"), "library")
     return send_from_directory(base, path)
 
 

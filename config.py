@@ -1,9 +1,9 @@
 class Config(object):
 
-    def __init__(self, default, user):
+    def __init__(self, default):
         self.items = {}
         self.__parse(default)
-        self.__parse(user)
+        # self.__parse(user)
 
     def __parse(self, path):
         with open(path, encoding="UTF-8") as file:
