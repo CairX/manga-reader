@@ -26,7 +26,6 @@ def test():
 @app.route("/mangas")
 def mangas():
     path = os.path.join(config.string("base"), "library/")
-    print(path)
     mangas = {}
 
     for root, dirs, files in os.walk(path):
@@ -56,7 +55,7 @@ def mangas():
     return jsonify(mangas)
 
 
-@app.route("/files/<path:path>")
+@app.route("/static/<path:path>")
 def files(path):
     return send_from_directory("static", path)
 
