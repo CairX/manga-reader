@@ -3,10 +3,12 @@ import json
 import os
 
 from config import Config
+from database import Database
 from flask import Flask, jsonify, send_from_directory
 
 config = Config('reader.conf')
 app = Flask(__name__)
+database = Database("data/reader.db")
 
 
 @app.route("/")
@@ -64,6 +66,27 @@ def files(path):
 def images(path):
     base = os.path.join(config.string("base"), "library")
     return send_from_directory(base, path)
+
+
+@app.rout("/reading/<manga>", methods=["GET"])
+def reading(manga):
+    reading = database.fetchone("SELECT * FROM reading WHERE title = ?", manga)
+    return jsonify({"reading": reading})
+
+
+@app.route("/reading/<title>/<chapter>/<page>", methods=["PUT"])
+def update(title, chapter, page):
+    exists = database.fetchone("SELECT 1 FROM reading WHERE title = ?", title)
+
+    if exists:
+        query = "UPDATE reading SET chapter = ?, page = ? WHERE title = ?"
+        database.execute(query, [(chapter, page, title)])
+    else:
+        query = "INSERT INTO reading(title, chapter, page) VALUES(?, ?, ?)"
+        database.execute(query, [(title, chapter, page)])
+
+    reading = database.fetchone("SELECT * FROM reading WHERE title = ?", title)
+    return jsonify({"manga": reading})
 
 
 if __name__ == "__main__":

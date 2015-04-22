@@ -12,32 +12,36 @@ class Database(object):
             result[column[0]] = row[index]
         return result
 
-    def fetchone(self, query):
+    def fetchone(self, query, *parameters):
         result = None
 
         with sqlite3.connect(self.database) as connection:
             connection.row_factory = self.__dict_factory
             cursor = connection.cursor()
-            cursor.execute(query)
+            cursor.execute(query, parameters)
             result = cursor.fetchone()
 
         return result
 
-    def fetchall(self, query):
+    def fetchall(self, query, *parameters):
         result = None
 
         with sqlite3.connect(self.database) as connection:
             connection.row_factory = self.__dict_factory
             cursor = connection.cursor()
-            cursor.execute(query)
+            cursor.execute(query, parameters)
             result = cursor.fetchall()
 
         return result
 
-    def execute(self, query):
+    def execute(self, query, parameters=None):
         with sqlite3.connect(self.database) as connection:
             cursor = connection.cursor()
-            cursor.execute(query)
+            if parameters:
+                print(parameters)
+                cursor.executemany(query, parameters)
+            else:
+                cursor.execute(query)
             connection.commit()
 
 
@@ -56,9 +60,9 @@ if __name__ == "__main__":
         VALUES('onepunch-man', '0056', '09.jpg');
     """
 
-    select_reading = "SELECT * FROM reading WHERE title = 'onepunch-man'"
+    select_reading = "SELECT * FROM reading"
 
-    database = Database("data/test.db")
+    database = Database("data/reader.db")
     database.execute(create_reading)
     # database.execute(insert_reading)
-    print(database.fetchone(select_reading))
+    print(database.fetchall(select_reading))
