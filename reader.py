@@ -68,7 +68,7 @@ def images(path):
     return send_from_directory(base, path)
 
 
-@app.rout("/reading/<manga>", methods=["GET"])
+@app.route("/reading/<manga>", methods=["GET"])
 def reading(manga):
     reading = database.fetchone("SELECT * FROM reading WHERE title = ?", manga)
     return jsonify({"reading": reading})
@@ -86,6 +86,7 @@ def update(title, chapter, page):
         database.execute(query, [(title, chapter, page)])
 
     reading = database.fetchone("SELECT * FROM reading WHERE title = ?", title)
+
     return jsonify({"manga": reading})
 
 

@@ -15,6 +15,27 @@ var readMode = false;
 
 
 /* ------------------------------------------------- *
+ * Temporary bookmark function.
+ * ------------------------------------------------- */
+document.getElementById("bookmark").addEventListener("click", function() {
+	var manga = mangas.value;
+	var chapter = chapters.value;
+	var page = pages.value;
+
+	var combined = manga + "/" + chapter + "/" + page;
+	Ajax.request("reading/" + combined, {
+		method: "PUT",
+		onSuccess: function () {
+			console.log("Bookmarked");
+		},
+		onFailure: function() {
+			console.log("Failed to update reading.");
+		}
+	});
+});
+
+
+/* ------------------------------------------------- *
  * Extract value for the given key from a list of
  * objects.
  * ------------------------------------------------- */
@@ -23,6 +44,18 @@ var extract = function(list, key) {
 
 	for (var i = 0; i < list.length; i++) {
 		result.push(list[i][key]);
+	}
+
+	return result;
+};
+var getItem = function(list, key, value) {
+	var result;
+
+	for (var i = 0; i < list.length; i++) {
+		if (list[i][key] == value) {
+			result = list[i];
+			break;
+		}
 	}
 
 	return result;
@@ -48,12 +81,24 @@ var createOptions = function(list) {
  * on selected manga.
  * ------------------------------------------------- */
 var updateManga = function() {
-	var manga = items[mangas.value];
+	var title = mangas.value;
+	var manga = items[title];
 
+	// Populate chapter options.
 	chapters.innerHTML = createOptions(extract(manga, "chapter"));
-	pages.innerHTML = createOptions(manga[chapters.selectedIndex].pages);
 
-	updateImage();
+	Ajax.get("reading/" + title, {
+		onSuccess: function(response) {
+			var reading = JSON.parse(response.response).reading;
+			var chapter = getItem(manga, "chapter", reading.chapter);
+
+			updateChapter(chapter, reading.page);
+		},
+		onFailure: function() {
+			console.log("Failed to get reading.");
+			updateChapter();
+		}
+	});
 };
 mangas.addEventListener("change", function() {
 	updateManga();
@@ -62,13 +107,17 @@ mangas.addEventListener("change", function() {
 
 
 /* ------------------------------------------------- *
- * Update pages for selected chapter.
+ * Update pages for given or selected chapter.
  * ------------------------------------------------- */
-var updateChapter = function() {
-	var chapter = items[mangas.value][chapters.selectedIndex];
-	pages.innerHTML = createOptions(chapter.pages);
+var updateChapter = function(chapter, page) {
+	if (chapter) {
+		chapters.value = chapter.chapter;
+	} else {
+		chapter = items[mangas.value][chapters.selectedIndex];
+	}
 
-	updateImage();
+	pages.innerHTML = createOptions(chapter.pages);
+	updateImage(page);
 };
 chapters.addEventListener("change", function() {
 	updateChapter();
@@ -79,9 +128,19 @@ chapters.addEventListener("change", function() {
 /* ------------------------------------------------- *
  * Upate the image viewed.
  * ------------------------------------------------- */
-var updateImage = function() {
-	var src = "images/" + mangas.value + "/" + chapters.value + "/" + pages.value;
+var updateImage = function(page) {
+	var manga = mangas.value;
+	var chapter = chapters.value;
+	if (page) {
+		pages.value = page;
+	} else {
+		page = pages.value;
+	}
+
+	var combined = manga + "/" + chapter + "/" + page;
+	var src = "images/" + combined;
 	image.src = src;
+
 	document.documentElement.scrollTop = 0;
 };
 pages.addEventListener("change", function() {
