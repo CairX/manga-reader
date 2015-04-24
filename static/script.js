@@ -90,13 +90,17 @@ var updateManga = function() {
 	Ajax.get("reading/" + title, {
 		onSuccess: function(response) {
 			var reading = JSON.parse(response.response).reading;
-			var chapter = getItem(manga, "chapter", reading.chapter);
 
-			updateChapter(chapter, reading.page);
+			if (reading) {
+				var chapter = getItem(manga, "chapter", reading.chapter);
+				updateChapter(chapter, reading.page);
+			} else {
+				updateChapter();
+			}
+
 		},
 		onFailure: function() {
 			console.log("Failed to get reading.");
-			updateChapter();
 		}
 	});
 };
