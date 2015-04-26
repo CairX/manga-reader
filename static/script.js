@@ -15,27 +15,6 @@ var readMode = false;
 
 
 /* ------------------------------------------------- *
- * Temporary bookmark function.
- * ------------------------------------------------- */
-document.getElementById("bookmark").addEventListener("click", function() {
-	var manga = mangas.value;
-	var chapter = chapters.value;
-	var page = pages.value;
-
-	var combined = manga + "/" + chapter + "/" + page;
-	Ajax.request("reading/" + combined, {
-		method: "PUT",
-		onSuccess: function () {
-			console.log("Bookmarked");
-		},
-		onFailure: function() {
-			console.log("Failed to update reading.");
-		}
-	});
-});
-
-
-/* ------------------------------------------------- *
  * Extract value for the given key from a list of
  * objects.
  * ------------------------------------------------- */
@@ -93,9 +72,9 @@ var updateManga = function() {
 
 			if (reading) {
 				var chapter = getItem(manga, "chapter", reading.chapter);
-				updateChapter(chapter, reading.page);
+				updateChapter(false, chapter, reading.page);
 			} else {
-				updateChapter();
+				updateChapter(true);
 			}
 
 		},
@@ -113,7 +92,7 @@ mangas.addEventListener("change", function() {
 /* ------------------------------------------------- *
  * Update pages for given or selected chapter.
  * ------------------------------------------------- */
-var updateChapter = function(chapter, page) {
+var updateChapter = function(bookmark, chapter, page) {
 	if (chapter) {
 		chapters.value = chapter.chapter;
 	} else {
@@ -121,10 +100,10 @@ var updateChapter = function(chapter, page) {
 	}
 
 	pages.innerHTML = createOptions(chapter.pages);
-	updateImage(page);
+	updateImage(bookmark, page);
 };
 chapters.addEventListener("change", function() {
-	updateChapter();
+	updateChapter(true);
 	chapters.blur();
 });
 
@@ -132,7 +111,7 @@ chapters.addEventListener("change", function() {
 /* ------------------------------------------------- *
  * Upate the image viewed.
  * ------------------------------------------------- */
-var updateImage = function(page) {
+var updateImage = function(bookmark, page) {
 	var manga = mangas.value;
 	var chapter = chapters.value;
 	if (page) {
@@ -146,9 +125,21 @@ var updateImage = function(page) {
 	image.src = src;
 
 	document.documentElement.scrollTop = 0;
+
+	if (bookmark) {
+		Ajax.request("reading/" + combined, {
+			method: "PUT",
+			onSuccess: function () {
+				console.log("Bookmarked.");
+			},
+			onFailure: function() {
+				console.log("Failed to bookmarked.");
+			}
+		});
+	}
 };
 pages.addEventListener("change", function() {
-	updateImage();
+	updateImage(true);
 	pages.blur();
 });
 
@@ -166,7 +157,7 @@ var next  = function() {
 		pages.value = pages.options[index].value;
 	}
 
-	updateImage();
+	updateImage(true);
 };
 
 
