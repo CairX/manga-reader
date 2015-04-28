@@ -5,6 +5,19 @@ class Database(object):
 
     def __init__(self, database):
         self.database = database
+        self.createtables()
+
+    def createtables(self):
+        create_reading = """
+            CREATE TABLE IF NOT EXISTS reading
+            (
+                title TEXT PRIMARY KEY,
+                chapter TEXT,
+                page TEXT,
+                saved TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """
+        self.execute(create_reading)
 
     def __dict_factory(self, cursor, row):
         result = {}
@@ -46,12 +59,14 @@ class Database(object):
 
 
 if __name__ == "__main__":
+    drop_reading = "DROP TABLE reading;"
     create_reading = """
         CREATE TABLE IF NOT EXISTS reading
         (
             title TEXT PRIMARY KEY,
             chapter TEXT,
-            page TEXT
+            page TEXT,
+            saved TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """
 
@@ -63,6 +78,7 @@ if __name__ == "__main__":
     select_reading = "SELECT * FROM reading"
 
     database = Database("data/reader.db")
+    # database.execute(drop_reading)
     database.execute(create_reading)
     # database.execute(insert_reading)
     print(database.fetchall(select_reading))
