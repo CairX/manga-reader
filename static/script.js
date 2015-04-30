@@ -209,36 +209,24 @@ Ajax.get("/mangas", {
 /* ------------------------------------------------- *
  * Keys
  * ------------------------------------------------- */
-document.addEventListener("keypress", function(e) {
-	console.log(e);
-
+document.addEventListener("keydown", function(e) {
 	switch (e.keyCode) {
-		// Left arrow
-		case 37:
+		case 37: // Left arrow
+		case 65: // A
 			previous();
 			break;
-		// Right arrow
-		case 39:
+
+		case 39: // Right arrow
+		case 68: // D
 			next();
 			break;
-	}
 
-	switch(e.charCode) {
-		// Space
-		case 32:
+		case 32: // Space
 			next();
 			e.preventDefault();
 			break;
-		// A
-		case 97:
-			previous();
-			break;
-		// D
-		case 100:
-			next();
-			break;
-		// R
-		case 114:
+
+		case 82: // R
 			toggleReadMode();
 			break;
 	}
