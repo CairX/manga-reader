@@ -16,15 +16,6 @@ def reader():
     return app.send_static_file("reader.html")
 
 
-@app.route("/test")
-def test():
-    path = os.path.join(config.string("base"), ".index/index.json")
-    with open(path, 'r') as file:
-        entries = json.load(file)
-        entries = {"entries": entries}
-        return jsonify(entries)
-
-
 @app.route("/mangas")
 def mangas():
     path = os.path.join(config.string("base"), "library/")
