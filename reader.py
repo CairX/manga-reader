@@ -59,6 +59,13 @@ def images(path):
     return send_from_directory(base, path)
 
 
+@app.route("/last", methods=["GET"])
+def last():
+    query = "SELECT * FROM reading ORDER BY saved DESC LIMIT 1"
+    reading = database.fetchone(query)
+    return jsonify({"reading": reading})
+
+
 @app.route("/reading/<manga>", methods=["GET"])
 def reading(manga):
     reading = database.fetchone("SELECT * FROM reading WHERE title = ?", manga)
@@ -70,7 +77,11 @@ def update(title, chapter, page):
     exists = database.fetchone("SELECT 1 FROM reading WHERE title = ?", title)
 
     if exists:
-        query = "UPDATE reading SET chapter = ?, page = ? WHERE title = ?"
+        query = """
+            UPDATE reading
+            SET chapter = ?, page = ?, saved = datetime()
+            WHERE title = ?
+        """
         database.execute(query, [(chapter, page, title)])
     else:
         query = "INSERT INTO reading(title, chapter, page) VALUES(?, ?, ?)"

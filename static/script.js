@@ -59,8 +59,14 @@ var createOptions = function(list) {
  * Update the chapter and page selector based
  * on selected manga.
  * ------------------------------------------------- */
-var updateManga = function() {
-	var title = mangas.value;
+var updateManga = function(title) {
+	console.log(title);
+	if (title) {
+		mangas.value = title;
+	} else {
+		title = mangas.value;
+	}
+
 	var manga = items[title];
 
 	// Populate chapter options.
@@ -201,7 +207,18 @@ Ajax.get("/mangas", {
 	onSuccess: function(response) {
 		items = JSON.parse(response.response);
 		mangas.innerHTML = createOptions(Object.keys(items));
-		updateManga();
+
+		Ajax.get("/last", {
+			onSuccess: function(response) {
+				var reading = JSON.parse(response.response).reading;
+
+				if (reading) {
+					updateManga(reading.title);
+				} else {
+					updateManga();
+				}
+			}
+		});
 	}
 });
 

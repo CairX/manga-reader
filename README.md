@@ -41,7 +41,6 @@ http://localhost:5000/
 \* Read mode removes everything besides the page image.
 
 ## todo
-* Remember the last viewed manga and display this manga when loading the reader again.
 * Remove Flask dependancy.
 * Make the application runnable/installable.
 * Make the application possible to run as a deamon for autostart.
