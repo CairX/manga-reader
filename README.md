@@ -37,6 +37,7 @@ http://localhost:5000/
 | Next page | Right arrow, D or Space |
 | Previous page | Left arrow or A |
 | Toogle read mode* | R |
+| Toogle between light (default) and dark theme. | T |
 
 \* Read mode removes everything besides the page image.
 

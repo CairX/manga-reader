@@ -200,6 +200,18 @@ var toggleReadMode = function() {
 
 
 /* ------------------------------------------------- *
+ * Toggle between light(default) and dark theme.
+ * ------------------------------------------------- */
+var toggleThemes = function() {
+	if (document.body.className.indexOf("dark") > -1) {
+		document.body.className = "";
+	} else {
+		document.body.className = "dark";
+	}
+};
+
+
+/* ------------------------------------------------- *
  * On init, load mangas and their belonging chapter
  * and pages.
  * ------------------------------------------------- */
@@ -245,6 +257,10 @@ document.addEventListener("keydown", function(e) {
 
 		case 82: // R
 			toggleReadMode();
+			break;
+
+		case 84: // T
+			toggleThemes();
 			break;
 	}
 });
