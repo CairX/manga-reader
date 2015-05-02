@@ -15,7 +15,7 @@ var readMode = false;
 
 
 /* ------------------------------------------------- *
- * Extract value for the given key from a list of
+ * Extract values for the given key from a list of
  * objects.
  * ------------------------------------------------- */
 var extract = function(list, key) {
@@ -27,6 +27,12 @@ var extract = function(list, key) {
 
 	return result;
 };
+
+
+/* ------------------------------------------------- *
+ * Extract object from list based on value for given
+ * property.
+ * ------------------------------------------------- */
 var getItem = function(list, key, value) {
 	var result;
 
@@ -39,6 +45,7 @@ var getItem = function(list, key, value) {
 
 	return result;
 };
+
 
 /* ------------------------------------------------- *
  * Generate option elements in the form of a
