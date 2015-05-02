@@ -60,7 +60,6 @@ var createOptions = function(list) {
  * on selected manga.
  * ------------------------------------------------- */
 var updateManga = function(title) {
-	console.log(title);
 	if (title) {
 		mangas.value = title;
 	} else {
@@ -181,7 +180,7 @@ var previous  = function() {
 		pages.value = pages.options[index].value;
 	}
 
-	updateImage();
+	updateImage(true);
 };
 
 
