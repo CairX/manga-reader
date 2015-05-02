@@ -5,15 +5,6 @@ Read manga that you have stored on your local file system. With automatic bookma
 ### requirements
 The application is writte for Python 3.4.
 
-Flask, more information can be found at http://flask.pocoo.org/ . Installation of this is simply done through pip.
-```
-pip install flask
-```
-or if you distrubation has something else then Python 3.4 as default you need to run.
-```
-pip3.4 install flask
-```
-
 ### installation
 The easist way is to download a ZIP of the project which you can find out to the right here on Gihub and simply unpack it. After that you need to modify the varibles in reader.conf.
 
@@ -42,6 +33,6 @@ http://localhost:5000/
 \* Read mode removes everything besides the page image.
 
 ## todo
-* Remove Flask dependancy.
 * Make the application runnable/installable.
 * Make the application possible to run as a deamon for autostart.
+* Remember selected theme.

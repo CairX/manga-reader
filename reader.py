@@ -1,19 +1,19 @@
 import collections
-import json
 import os
 
+from bottle import Bottle, run, static_file
 from config import Config
 from database import Database
-from flask import Flask, jsonify, send_from_directory
 
+
+app = Bottle()
 config = Config('reader.conf')
-app = Flask(__name__)
 database = Database("data/reader.db")
 
 
 @app.route("/")
 def reader():
-    return app.send_static_file("reader.html")
+    return static_file("reader.html", root="static")
 
 
 @app.route("/mangas")
@@ -45,34 +45,34 @@ def mangas():
     for manga, chapters in mangas.items():
         mangas[manga] = sorted(chapters, key=lambda c: c["chapter"])
 
-    return jsonify(mangas)
+    return mangas
 
 
-@app.route("/static/<path:path>")
-def files(path):
-    return send_from_directory("static", path)
+@app.route("/static/<filepath:path>")
+def files(filepath):
+    return static_file(filepath, root="static")
 
 
-@app.route("/images/<path:path>")
-def images(path):
-    base = os.path.join(config.string("base"), "library")
-    return send_from_directory(base, path)
+@app.route("/images/<filepath:path>")
+def images(filepath):
+    library = os.path.join(config.string("base"), "library")
+    return static_file(filepath, root=library)
 
 
-@app.route("/last", methods=["GET"])
+@app.route("/last", method=["GET"])
 def last():
     query = "SELECT * FROM reading ORDER BY saved DESC LIMIT 1"
     reading = database.fetchone(query)
-    return jsonify({"reading": reading})
+    return {"reading": reading}
 
 
-@app.route("/reading/<manga>", methods=["GET"])
+@app.route("/reading/<manga>", method=["GET"])
 def reading(manga):
     reading = database.fetchone("SELECT * FROM reading WHERE title = ?", manga)
-    return jsonify({"reading": reading})
+    return {"reading": reading}
 
 
-@app.route("/reading/<title>/<chapter>/<page>", methods=["PUT"])
+@app.route("/reading/<title>/<chapter>/<page>", method=["PUT"])
 def update(title, chapter, page):
     exists = database.fetchone("SELECT 1 FROM reading WHERE title = ?", title)
 
@@ -89,9 +89,8 @@ def update(title, chapter, page):
 
     reading = database.fetchone("SELECT * FROM reading WHERE title = ?", title)
 
-    return jsonify({"manga": reading})
+    return {"manga": reading}
 
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run()
+    run(app, host="localhost", port=5000, debug=True)
