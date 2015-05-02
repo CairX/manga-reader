@@ -129,7 +129,7 @@ var updateImage = function(bookmark, page) {
 	var src = "images/" + combined;
 	image.src = src;
 
-	document.documentElement.scrollTop = 0;
+	document.body.scrollTop = document.documentElement.scrollTop = 0;
 
 	if (bookmark) {
 		Ajax.request("reading/" + combined, {
