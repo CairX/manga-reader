@@ -1,4 +1,4 @@
-/* global Ajax, console */
+/* global Ajax, console, ElementUtils, List */
 
 "use strict";
 
@@ -13,38 +13,6 @@ var pages = document.getElementById("pages");
 var image = document.getElementById("image");
 var readMode = false;
 
-
-/* ------------------------------------------------- *
- * Extract values for the given key from a list of
- * objects.
- * ------------------------------------------------- */
-var extract = function(list, key) {
-	var result = [];
-
-	for (var i = 0; i < list.length; i++) {
-		result.push(list[i][key]);
-	}
-
-	return result;
-};
-
-
-/* ------------------------------------------------- *
- * Extract object from list based on value for given
- * property.
- * ------------------------------------------------- */
-var getItem = function(list, key, value) {
-	var result;
-
-	for (var i = 0; i < list.length; i++) {
-		if (list[i][key] == value) {
-			result = list[i];
-			break;
-		}
-	}
-
-	return result;
-};
 
 
 /* ------------------------------------------------- *
@@ -76,14 +44,14 @@ var updateManga = function(title) {
 	var manga = items[title];
 
 	// Populate chapter options.
-	chapters.innerHTML = createOptions(extract(manga, "chapter"));
+	chapters.innerHTML = createOptions(List.extractValues(manga, "chapter"));
 
 	Ajax.get("reading/" + title, {
 		onSuccess: function(response) {
 			var reading = JSON.parse(response.response).reading;
 
 			if (reading) {
-				var chapter = getItem(manga, "chapter", reading.chapter);
+				var chapter = List.extractItem(manga, "chapter", reading.chapter);
 				updateChapter(false, chapter, reading.page);
 			} else {
 				updateChapter(true);
@@ -200,7 +168,7 @@ var toggleReadMode = function() {
 
 	var elements = document.getElementsByClassName("toggle");
 	for (var i = 0; i < elements.length; i++) {
-		elements[i].style.display = readMode ? "none" : "";
+		ElementUtils.display(elements[i], !readMode);
 	}
 };
 
@@ -209,11 +177,7 @@ var toggleReadMode = function() {
  * Toggle between light(default) and dark theme.
  * ------------------------------------------------- */
 var toggleThemes = function() {
-	if (document.body.className.indexOf("dark") > -1) {
-		document.body.className = "";
-	} else {
-		document.body.className = "dark";
-	}
+	ElementUtils.toggleClass(document.body, "dark");
 };
 
 
