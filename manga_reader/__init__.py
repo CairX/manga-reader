@@ -1,15 +1,37 @@
 import collections
 import os
 
-from bottle import Bottle, run, static_file
-from config import Config
-from database import Database
+from manga_reader.bottle import Bottle, run, static_file
+from manga_reader.config import Config
+from manga_reader.database import Database
+
+
+def folder(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 # ------------------------------------------------- #
 # Setup: Initiate needed objects.
 # ------------------------------------------------- #
 app = Bottle()
+
+home = os.path.expanduser("~")
+
+
+awesome = os.path.join(home, ".config/manga-reader")
+something = os.path.join(awesome, "reader.conf")
+print(home)
+print(awesome)
+print(something)
+
+folder(awesome)
+
+if os.path.isfile(something):
+    print("FILE EXISTS")
+else:
+    print("FILE DOES NOT EXISTS")
+
 config = Config('reader.conf')
 database = Database("data/reader.db")
 
