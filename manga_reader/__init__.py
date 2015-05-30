@@ -141,5 +141,6 @@ def update(title, chapter, page):
 # ------------------------------------------------- #
 # Main: Run the application.
 # ------------------------------------------------- #
-if __name__ == "__main__":
+# if __name__ == "__main__":
+def main():
     run(app, host="localhost", port=5000, debug=True)
