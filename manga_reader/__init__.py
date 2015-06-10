@@ -4,6 +4,7 @@ import os
 from manga_reader.bottle import Bottle, run, static_file
 from manga_reader.config import Config
 from manga_reader.database import Database
+from pkg_resources import resource_filename
 
 
 def folder(path):
@@ -13,27 +14,17 @@ def folder(path):
 
 # ------------------------------------------------- #
 # Setup: Initiate needed objects.
+# TODO: Need to create folder and file if they
+# don't exist.
 # ------------------------------------------------- #
 app = Bottle()
 
-home = os.path.expanduser("~")
+config_folder = os.path.join(os.path.expanduser("~"), ".config/manga-reader")
+config_file = os.path.join(config_folder, "reader.conf")
+config = Config(config_file)
+database = Database(os.path.join(config_folder, "reader.db"))
 
-
-awesome = os.path.join(home, ".config/manga-reader")
-something = os.path.join(awesome, "reader.conf")
-print(home)
-print(awesome)
-print(something)
-
-folder(awesome)
-
-if os.path.isfile(something):
-    print("FILE EXISTS")
-else:
-    print("FILE DOES NOT EXISTS")
-
-config = Config('reader.conf')
-database = Database("data/reader.db")
+data_folder = resource_filename("manga_reader.data", '')
 
 
 # ------------------------------------------------- #
@@ -41,7 +32,7 @@ database = Database("data/reader.db")
 # ------------------------------------------------- #
 @app.route("/")
 def reader():
-    return static_file("reader.html", root="static")
+    return static_file("reader.html", root=data_folder)
 
 
 # ------------------------------------------------- #
@@ -49,7 +40,7 @@ def reader():
 # ------------------------------------------------- #
 @app.route("/static/<filepath:path>")
 def files(filepath):
-    return static_file(filepath, root="static")
+    return static_file(filepath, root=data_folder)
 
 
 # ------------------------------------------------- #

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='manga-reader',
@@ -8,7 +8,17 @@ setup(
     author='Thomas Cairns',
     url='https://github.com/CairX/manga-reader',
 
-    packages=['manga_reader'],
+    packages=find_packages(),
+    package_data={
+        "manga-reader.data": [
+            'static/ajax.js',
+            'static/script.js',
+            'static/utils.js',
+            'static/inde.html',
+            'static/style.css'
+        ]
+    },
+
     entry_points={
         'console_scripts': [
             'manga-reader=manga_reader:main',
@@ -23,3 +33,15 @@ setup(
         'Topic :: Software Development :: Documentation',
     ]
 )
+
+"""
+    data_files=[
+        ('manga-reader/data', [
+            'static/ajax.js',
+            'static/script.js',
+            'static/utils.js',
+            'static/inde.html',
+            'static/style.css'
+        ])
+    ]
+"""
